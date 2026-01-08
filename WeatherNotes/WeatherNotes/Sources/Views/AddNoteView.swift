@@ -8,30 +8,47 @@
 import SwiftUI
 
 struct AddNoteView: View {
+    @Environment(\.dismiss) var dismiss
+    @State var noteTitle: String = ""
+    @State private var noteDescription: String = "Description"
     
     var body: some View {
         NavigationStack {
-            VStack() {
-                
-            }
+            List {
+                HStack{
+                    Text("Title")
+                    Spacer()
+                    TextField("Text", text: $noteTitle)
+                        .multilineTextAlignment(.trailing)
+                } // HStack
+                HStack{
+                    TextEditor(text: $noteDescription)
+                        .scrollDisabled(true)
+                        .foregroundStyle(noteDescription == "Description"
+                                         ? Metrics.Description.emptyDescriptionColor
+                                         : Metrics.Description.descriptionColor)
+                        .frame(height: Metrics.Description.frameHeight)
+                } // HStack
+            } // List
+            .scrollDisabled(true)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {
-                        
+                        dismiss()
                     }
-                        .foregroundStyle(Metrics.Buttons.color)
-                        .font(Font.system(
-                            size: Metrics.Buttons.fontSize,
-                            weight: Metrics.Buttons.fontWeight
-                        ))
+                    .foregroundStyle(Metrics.Buttons.color)
+                    .font(Font.system(
+                        size: Metrics.Buttons.fontSize,
+                        weight: Metrics.Buttons.fontWeight)
+                    )
                 }
                 ToolbarItem(placement: .principal) {
                     Text("Add Note")
                         .font(Font.system(
                             size: Metrics.Title.fontSize,
-                            weight: Metrics.Title.fontWeight
-                        ))
+                            weight: Metrics.Title.fontWeight)
+                        )
                         .foregroundStyle(Metrics.Title.color)
                         .padding(.horizontal, Metrics.Title.Frame.horizontalPadding)
                         .padding(.vertical, Metrics.Title.Frame.verticalPadding)
@@ -43,12 +60,14 @@ struct AddNoteView: View {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") {
                         
+                        dismiss()
                     }
+                    .disabled(noteTitle.isEmpty || noteDescription == "Description")
                     .foregroundStyle(Metrics.Buttons.color)
                     .font(Font.system(
                         size: Metrics.Buttons.fontSize,
-                        weight: Metrics.Buttons.fontWeight
-                    ))
+                        weight: Metrics.Buttons.fontWeight)
+                    )
                 }
             }
         }
@@ -71,6 +90,12 @@ private enum Metrics {
         static let fontSize = 25.0
         static let fontWeight: Font.Weight = .regular
         static let color: Color = .indigo
+    }
+    
+    enum Description {
+        static let frameHeight = 200.0
+        static let emptyDescriptionColor: Color = .gray
+        static let descriptionColor: Color = .black
     }
     
     static let cornerRadius = 25.0
