@@ -14,6 +14,6 @@ struct NoteModel: Identifiable, Codable {
     let weatherDescription: String
     let location: String
     let temperature: String
-    let icon: String 
+    let icon: String
     let date: Date
 }
