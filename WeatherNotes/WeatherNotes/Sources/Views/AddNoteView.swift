@@ -9,8 +9,8 @@ import SwiftUI
 
 struct AddNoteView: View {
     @Environment(\.dismiss) var dismiss
-    @State var noteTitle: String = ""
-    @State private var noteDescription: String = "Description"
+    
+    @StateObject private var weatherVM = WeatherViewModel()
     
     var body: some View {
         NavigationStack {
@@ -18,13 +18,13 @@ struct AddNoteView: View {
                 HStack{
                     Text("Title")
                     Spacer()
-                    TextField("Text", text: $noteTitle)
+                    TextField("Text", text: $weatherVM.noteTitle)
                         .multilineTextAlignment(.trailing)
                 } // HStack
                 HStack{
-                    TextEditor(text: $noteDescription)
+                    TextEditor(text: $weatherVM.noteDescription)
                         .scrollDisabled(true)
-                        .foregroundStyle(noteDescription == "Description"
+                        .foregroundStyle(weatherVM.noteDescription == "Description"
                                          ? Metrics.Description.emptyDescriptionColor
                                          : Metrics.Description.descriptionColor)
                         .frame(height: Metrics.Description.frameHeight)
@@ -37,12 +37,12 @@ struct AddNoteView: View {
                     Button("Cancel") {
                         dismiss()
                     }
-                    .foregroundStyle(Metrics.Buttons.color)
+                    .foregroundStyle(Metrics.Buttons.activeColor)
                     .font(Font.system(
                         size: Metrics.Buttons.fontSize,
                         weight: Metrics.Buttons.fontWeight)
                     )
-                }
+                } // ToolbarItem
                 ToolbarItem(placement: .principal) {
                     Text("Add Note")
                         .font(Font.system(
@@ -56,20 +56,37 @@ struct AddNoteView: View {
                             RoundedRectangle(cornerRadius: Metrics.cornerRadius)
                                 .fill(Metrics.Title.Frame.color)
                         )
-                }
+                } // ToolbarItem
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") {
-                        
-                        dismiss()
+                        weatherVM.buttonIsTapped()
+                        if (weatherVM.errorMessage == nil) {
+                            dismiss()
+                        }
                     }
-                    .disabled(noteTitle.isEmpty || noteDescription == "Description")
-                    .foregroundStyle(Metrics.Buttons.color)
+                    .disabled(
+                        weatherVM.noteTitle.isEmpty ||
+                        weatherVM.noteDescription == "Description")
+                    .foregroundStyle(weatherVM.noteDescription == "Description"
+                                     ? Metrics.Buttons.pasiveColor
+                                     : Metrics.Buttons.activeColor)
                     .font(Font.system(
                         size: Metrics.Buttons.fontSize,
                         weight: Metrics.Buttons.fontWeight)
                     )
-                }
-            }
+                } // ToolbarItem
+            } // toolbar
+        } // NavigationStack
+        .alert(
+            "Error",
+            isPresented: Binding(
+                get: { weatherVM.errorMessage != nil },
+                set: { _ in weatherVM.errorMessage = nil }
+            )
+        ) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text(weatherVM.errorMessage ?? "")
         }
     }
 }
@@ -89,7 +106,8 @@ private enum Metrics {
     enum Buttons {
         static let fontSize = 25.0
         static let fontWeight: Font.Weight = .regular
-        static let color: Color = .indigo
+        static let activeColor: Color = .indigo
+        static let pasiveColor: Color = .gray
     }
     
     enum Description {
