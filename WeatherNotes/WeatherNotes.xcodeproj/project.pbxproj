@@ -10,9 +10,22 @@
 		376AFC052F0FE91700D5F7E8 /* WeatherNotes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeatherNotes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		371649E52F1130CB00AFCDC0 /* Exceptions for "WeatherNotes" folder in "WeatherNotes" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 376AFC042F0FE91700D5F7E8 /* WeatherNotes */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		376AFC072F0FE91700D5F7E8 /* WeatherNotes */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				371649E52F1130CB00AFCDC0 /* Exceptions for "WeatherNotes" folder in "WeatherNotes" target */,
+			);
 			path = WeatherNotes;
 			sourceTree = "<group>";
 		};
@@ -262,6 +275,7 @@
 				DEVELOPMENT_TEAM = XW8R778NMA;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = WeatherNotes/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -296,6 +310,7 @@
 				DEVELOPMENT_TEAM = XW8R778NMA;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = WeatherNotes/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
