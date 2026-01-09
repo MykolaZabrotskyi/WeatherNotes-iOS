@@ -5,7 +5,7 @@
 //  Created by Mykola Zabrotskyi on 09.01.2026.
 //
 
-import SwiftUI
+import Foundation
 import Combine
 
 @MainActor
@@ -43,27 +43,30 @@ class WeatherViewModel: ObservableObject {
         return WeatherIcon(rawValue: iconCode)?.systemImageName ?? "questionmark.circle"
     }
     
-    func buttonIsTapped() {
-        Task {
-            await fetchWeather()
-            if errorMessage == nil {
-                let note: NoteModel = NoteModel(
-                    title: noteTitle,
-                    description: noteDescription,
-                    weatherDescription: descriptionString,
-                    location: cityName,
-                    temperature: temperatureString,
-                    icon: systemIcon,
-                    date: Date()
-                )
-                notesStorage.add(note)
-            }
+    func saveNoteWithWeather() async -> Bool {
+        await fetchWeather()
+
+        if errorMessage == nil {
+            let note = NoteModel(
+                title: noteTitle,
+                description: noteDescription,
+                weatherDescription: descriptionString,
+                location: cityName,
+                temperature: temperatureString,
+                icon: systemIcon,
+                date: Date()
+            )
+            
+            notesStorage.add(note)
+            return true
+        } else {
+            return false
         }
     }
     
     private func fetchWeather() async {
         do {
-            weather = try await service.getWeather(city: "kyiv")
+            weather = try await service.getWeather()
             errorMessage = nil
         } catch let error as WeatherError {
             errorMessage = error.localizedDescription

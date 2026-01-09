@@ -17,7 +17,6 @@ struct AddNoteView: View {
             List {
                 HStack{
                     Text("Title")
-                    Spacer()
                     TextField("Text", text: $weatherVM.noteTitle)
                         .multilineTextAlignment(.trailing)
                 } // HStack
@@ -59,9 +58,12 @@ struct AddNoteView: View {
                 } // ToolbarItem
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") {
-                        weatherVM.buttonIsTapped()
-                        if (weatherVM.errorMessage == nil) {
-                            dismiss()
+                        Task {
+                            let success = await weatherVM.saveNoteWithWeather()
+                            
+                            if success {
+                                dismiss()
+                            }
                         }
                     }
                     .disabled(
@@ -116,7 +118,7 @@ private enum Metrics {
         static let descriptionColor: Color = .black
     }
     
-    static let cornerRadius = 25.0
+    static let cornerRadius = 20.0
 }
 
 #Preview {
